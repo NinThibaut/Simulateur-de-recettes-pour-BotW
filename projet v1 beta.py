@@ -85,7 +85,7 @@ def recommencer():
     fenetre2.destroy()
     test2 = True
 
-### Definition des ingredients ###
+### Definition des ingredients et de leurs valeurs ###
 
 liste_ingredient = [
     Ingredient("Pomme", 1, 1),
