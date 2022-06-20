@@ -1,4 +1,5 @@
 from tkinter import *
+from ingredients import liste_ingredient
 from tkinter.font import Font
 from sys import exit
 
@@ -34,7 +35,7 @@ class Ingredient:
             liste_label[compteur_ingredient-1]['image'] = image_ingredient_choisi[compteur_ingredient-1]
 
     def information(self):
-        global information_ingredient, test, ingredient_choisi
+        global information_ingredient, test, ingredient_choisi, fenetre
         ingredient_choisi = self
         information_ingredient = self.__dict__
         test = True
@@ -207,7 +208,7 @@ liste_ingredient = [
     Ingredient("Coeur Antique", 117, duree=190, type="Monstre"),
     Ingredient("Coeur Antique Geant", 118, duree=190, type="Monstre"),
 ]
-fenetre_titre = None
+
 test1 = False
 fenetre_titre = Tk()
 fenetre_titre.title('Accueil')
