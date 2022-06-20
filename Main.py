@@ -1,9 +1,10 @@
 from tkinter import *
-from ingredients import liste_ingredient
 from tkinter.font import Font
 from sys import exit
 
 class Ingredient:
+
+    ### Classe définissant les Ingredients dans liste_ingredient
 
     def __init__(self, nom, numero, coeur=0, effet="Aucun", duree=30, niveau = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}, valeur_max=None, valeur_enduro_vigueur=None, type="Normal"):
         self.nom = nom
@@ -17,6 +18,8 @@ class Ingredient:
             self.valeur_max = valeur_max
         if effet == 'Enduro' or effet == 'Vigueur':
             self.valeur_enduro_vigueur = valeur_enduro_vigueur
+
+    ### Methode si l'ingredient est choisi dans une recette
 
     def choisi(self):
         global image_ingredient_choisi, liste_label, ingredients_choisis, compteur_ingredient, bouton_termine
@@ -34,6 +37,8 @@ class Ingredient:
             image_ingredient_choisi.append(PhotoImage(file=f"./images/{self.numero}.png"))
             liste_label[compteur_ingredient-1]['image'] = image_ingredient_choisi[compteur_ingredient-1]
 
+    ### Methode si l'ingredient doit donner ses informations 
+
     def information(self):
         global information_ingredient, test, ingredient_choisi, fenetre
         ingredient_choisi = self
@@ -41,12 +46,16 @@ class Ingredient:
         test = True
         fenetre.destroy()
 
+### Fonction qui est utilisée si l'utilisateur appuie sur le bouton Supprimer 
+
 def supprimer():
     global ingredients_choisis, image_ingredient_choisi, compteur_ingredient
     ingredients_choisis = {}
     image_ingredient_choisi = []
     compteur_ingredient = 0
     bouton_termine['state'] = DISABLED
+
+### Fonction qui ferme la fenetre_titre ou la fenetre principale
 
 def close(a):
     global test, test1
@@ -57,6 +66,7 @@ def close(a):
         test = True
         fenetre.destroy()
     
+### Comme son nom l'indique, fonction qui fait changer de page.
 
 def change_page(mouvement):
     global page, page_changee
@@ -67,19 +77,25 @@ def change_page(mouvement):
     page_changee = True
     fenetre.destroy()
 
+### Fonction qui est utilisée si l'utilisateur clique sur le bouton "Information sur les Ingrédients"
+
 def information():
-    global is_recette, test1, page_changee
+    global is_recette, page_changee
     is_recette = False
     fenetre.destroy()
     print('information')
     page_changee = True
 
+### Fonction qui est utilisée si l'utilisateur clique sur le bouton "Simulateur de recettes"
+
 def recette():
-    global is_recette, test1, page_changee
+    global is_recette, page_changee
     is_recette = True
     fenetre.destroy()
     print('recette', fenetre)
     page_changee = True
+
+### Fonction qui est utilisée si l'utilisateur appuie sur le bouton "Recommencer" à la fin
 
 def recommencer():
     global fenetre2, test2
@@ -209,6 +225,8 @@ liste_ingredient = [
     Ingredient("Coeur Antique Geant", 118, duree=190, type="Monstre"),
 ]
 
+### Affichage de la fenêtre titre
+
 test1 = False
 fenetre_titre = Tk()
 fenetre_titre.title('Accueil')
@@ -220,7 +238,11 @@ Label(fenetre_titre, image=logo, bg='black', fg='white').grid(columnspan=2)
 Button(fenetre_titre, text="Commencer", command=lambda : close(1), bg='black', fg='white',font=Font(size=20), padx=170, pady=8).grid(columnspan=2)
 fenetre_titre.mainloop()
 is_recette = True
-while test1:
+
+### Définition des variables nécessaires au début du programme 
+### et quand l'utilisateur appuie sur "Recommencer" à la fin.
+
+while test1: ### Si test1 == False c'est que l'utilisateur a fermé la fenetre titre et n'a pas cliqué sur "Commencer"
     coeurs = 0
     test2 = False
     valeur_max = 0
@@ -238,17 +260,23 @@ while test1:
     page_changee = False
     ingredients_enduro_vigueur = {}
     ingredients_choisis = {}
+
+### Création des variables et widgets affichés tout le temps à l'ouverture de la fenetre principale
+
     while not test:
         compteur = 0
         page_changee = False
         compteur2 = 0
         fenetre = Tk()
-        Label(fenetre, pady=20).grid(row=0, column=0)
+        Label(fenetre, pady=20).grid(row=0, column=0) # Label servant à occuper la row 0 
         fenetre.geometry("+0+0")
         fenetre.resizable(width=False, height=False)
         background_photo = PhotoImage(file="./images/background.png", master=fenetre)
         background_label = Label(fenetre, image=background_photo)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
+        
+### Mise en place des widgets spécifiques au simulateur de recettes (tout le temps le cas au lancement du programme)
+        
         if is_recette:
             fenetre.title('Choix des Ingredients')
             bouton_recette = Button(fenetre, text="Simulateur de Recettes", bg='black', fg='white', command=recette, relief=FLAT, font=Font(size=15), padx=20, pady=10, state=DISABLED)
@@ -258,38 +286,48 @@ while test1:
             if liste_label != []:
                liste_label = []
                image_ingredient_choisi = []
+            ### S'il y a eu un changement de page, cette boucle for affiche à nouveau les ingredients choisis dans les carrés en haut
             for ingredient, valeur in ingredients_choisis.items():
                 for nombre in range(valeur):
                     image_ingredient_choisi.append(PhotoImage(file=f"./images/{ingredient.numero}.png"))
                     liste_label.append(Label(fenetre, bg='black', pady=40, padx=50, image=image_ingredient_choisi[compteur2]))
                     liste_label[-1].grid(row=2, column=compteur2+2)
                     compteur2 += 1
+            ### Puis complète avec des carrés vides 
             while len(liste_label) != 5:
                 liste_label.append(Label(fenetre, bg='black', pady=40, padx=50))
                 liste_label[-1].grid(row=2, column=compteur2+2)
                 compteur2 += 1
-                Button(fenetre, text='Supprimer', bg='black', fg='white', padx = 100, pady = 30, command=supprimer).grid(row=2, column=7, columnspan=3)
+            Button(fenetre, text='Supprimer', bg='black', fg='white', padx = 100, pady = 30, command=supprimer).grid(row=2, column=7, columnspan=3)
             bouton_termine = Button(fenetre, text="Terminé", command=lambda : close(2), width=100, bg='black', fg='white', font=100, pady=20)
             bouton_termine.grid(row=8, column=1, columnspan=8)
+        
+### Mise en place des widgets si le bouton "Information sur les ingredients" a été cliqué
+        
         else:
             fenetre.title("Choix de l'Ingredient")
             bouton_recette = Button(fenetre, text="Simulateur de Recettes", bg='black', command=recette, fg='white', relief=FLAT, font=Font(size=15), padx=20, pady=10)
             bouton_information = Button(fenetre, text="Informations sur les ingrédients", command=information, bg='black', fg='white', relief=FLAT, font=Font(size=15), padx=20, pady=10, state=DISABLED)
             bouton_recette.place(x=250, y=0)
             bouton_information.place(x=750, y=0)
+
+### Affichage des boutons ingredients en fonction de la page
+
         for ingredient in liste_ingredient:
-            if compteur < 50*(page-1):
+            if compteur < 50*(page-1): # Traduction : Si l'ingredient ne doit pas être affiché, la boucle for passe à l'ingredient suivant
                 compteur += 1
                 continue
-            elif compteur == 50*page:
+            elif compteur == 50*page: # Traduction : Si tous les ingredients sont affichés, la boucle for s'arrete.
                 break
+            
             else:
                 ligne = (compteur-((page-1)*50)) // 10
                 colonne = (compteur-((page-1)*50)) % 10
                 compteur += 1
                 ingredient_photo = PhotoImage(file=f"./images/{ingredient.numero}.png", master=fenetre)
-                image_coeur = PhotoImage(file="./images/coeur.png", master=fenetre)
-                if ingredient.effet != "Aucun" and is_recette:
+                image_coeur = PhotoImage(file="./images/coeur.png", master=fenetre)   
+            ### J'ai l'impression que les lignes 330 à 341 peuvent être opti...
+                if ingredient.effet != "Aucun" and is_recette: 
                     image_effet = PhotoImage(file=f"./images/{ingredient.effet}.png", master=fenetre, height=20, width=20)
                     Button(fenetre, image=ingredient_photo,command=lambda ingredient=ingredient, ingredient_photo=ingredient_photo, image_coeur=image_coeur,image_effet=image_effet: ingredient.choisi(), relief=FLAT, bg='black').grid(row=ligne + 3, column=colonne, padx=12, pady=12)
                     Label(fenetre,image=image_effet, bg='black').grid(column=colonne, row=ligne+3, sticky=SE, padx=15, pady=15)
@@ -302,52 +340,76 @@ while test1:
                 else:
                     Button(fenetre, image=ingredient_photo, relief=FLAT, command=lambda ingredient=ingredient, ingredient_photo=ingredient_photo,image_coeur = image_coeur: ingredient.information(), bg='black').grid(row=ligne + 3, column=colonne, pady=12, padx=12)
                 Label(fenetre, image=image_coeur, bg='black').grid(row=ligne + 3, column=colonne, sticky=NE, padx=20, pady=23)
+        
+### Si aucun ingredient a été selectionné avant l'ouverture de la fenetre le bouton "Terminé" est désactivé pour éviter les erreurs
+        
         if compteur_ingredient == 0 and is_recette:
             bouton_termine['state'] = DISABLED
+        
+### Affiche ou non les boutons permettant de changer de page
+
         if page != 1:
             image_back = PhotoImage(file='./images/Back.png', master=fenetre)
             Button(fenetre, image=image_back, bg='black', command= lambda : change_page("Précédent")).grid(row=8)
         if page != 3:
             image_next = PhotoImage(file='./images/Next.png', master=fenetre)
             Button(fenetre, image=image_next, bg='black', command= lambda : change_page("Suivant")).grid(row=8, column=9)
-        fenetre.mainloop()
-        if not page_changee and not test:
-            exit(1)
+        fenetre.mainloop() ### La fenetre s'ouvre
+        if not page_changee and not test: # Traduction : Si l'utilisateur a fermé la fenetre, 
+            exit(1)                       # le programme s'arrete.
+
+### L'utilisateur a choisi les ingredients de sa recette ou l'ingredient dont il veut avoir les infos 
+### et maintanant il faut calculer le résultat ou trouver les bonnes infos et l'afficher à l'écran
+    
+    ### Calcul du résultat de la recette
+
     if is_recette:
-        for ingredient in ingredients_choisis.keys():
-            for valeur in range(ingredients_choisis[ingredient]):
+        for ingredient in ingredients_choisis.keys(): # Pour chaque type d'ingredient dans la recette
+            for valeur in range(ingredients_choisis[ingredient]):# Pour chaque ingredient de ce type
+            ### Calcul des coeurs jaunes rendus par l'ingredient s'il est Max
                 if ingredient.effet == "Max":
                     valeur_max += ingredient.valeur_max
+            ### Si l'ingredient a un effet Enduro/Vigueur, ajoute 1 au nombre de cet ingredient 
+            ### dans le dico ingredient_enduro_vigueur
                 if ingredient.effet == "Enduro" or ingredient.effet == "Vigueur":
                     if ingredient in ingredients_enduro_vigueur:
                         ingredients_enduro_vigueur[ingredient] += 1
                     else:
                         ingredients_enduro_vigueur[ingredient] = 1
-                coeurs += ingredient.coeur
-                duree += ingredient.duree
+                coeurs += ingredient.coeur ### Calcul des coeurs rendus par la recette
+                duree += ingredient.duree  ### Calcul de la durée de l'effet de la recette
+            ### Calcul de l'effet de la recette
                 if not "effet" in locals() and ingredient.effet != "Aucun":
                     effet = ingredient.effet
                 elif ingredient.effet == "Aucun" or ingredient.effet == effet:
                     pass
                 else:
                     effet = "Aucun"
+            ### Si l'ingredient est un matériau de monstre ou un ingredient de remède, l'enregistre dans la liste types
                 if ingredient.type != "Normal" and not ingredient.type in types:
                     types.append(ingredient.type)
+
+    ### Si la recette contient que des ingredients de remède sans ingredient de monstre ou vice-versa, 
+    ### le résultat est un plat douteux sans effet qui diminue par 2 le nombre de coeurs rendus par la recette.
         if types == ["Remede"] or types == ["Monstre"]:
             effet = "Aucun"
             if coeurs == 0:
                 coeurs = 0.5
             else:
                 coeurs /= 2
+    ### Si il y a des ingredients de monstre et de remède, cela crée un remède qui rend 0 coeurs
         elif types == ["Remede", "Monstre"] or types == ["Monstre", "Remede"]:
             coeurs = 0
         if not "effet" in locals():
             effet = "Aucun"
+    ### Calcul de l'endurance rendue/donnée
         if effet == "Enduro" or effet == "Vigueur":
             for ingredient, valeur in ingredients_enduro_vigueur.items():
                 valeur_endurance += ingredient.valeur_enduro_vigueur[valeur]
+    ### Calcul de la durée en minutes et secondes
         duree_min = duree // 60
         duree_sec = duree % 60
+    ### Calcul du niveau de la recette et borne le niveau max
         if effet != "Aucun":
             for ingredient, valeur in ingredients_choisis.items():
                 niveau += ingredient.niveau[valeur]
@@ -357,15 +419,19 @@ while test1:
                 niveau = 2
         if coeurs == 0 and effet == "Aucun":
             coeurs = 1
+    
+### Affichage de la fenetre résultat
+
         fenetre2 = Tk()
         fenetre2.resizable(width=False, height=False)
         fenetre2.title("Résultat")
         photo = PhotoImage(file="./images/background.png", master=fenetre2)
         Label(fenetre2, image=photo).place(x=0, y=0, relwidth=1, relheight=1)
         Label(fenetre2, text="Résultat", bg='black', fg='white', font=100).grid(columnspan=5)
-        if coeurs != 0:
-            Label(fenetre2, text=f"Points de vie : {'Récupération Complète' if effet == 'Max' or coeurs >= 30 else ''}", bg='black', fg='white', font=Font(size=12)).grid(row=1, sticky=W)
-            effet_y = 49
+    ### Affichage du nombre de coeurs rendus
+        if coeurs >= 30 or effet == "Max":
+            Label(fenetre2, text="Points de vie : Récupération Complète", bg='black', fg='white', font=Font(size=12)).grid(row=1, sticky=W)
+            effet_y = 49 ### Ce type de variable sert à savoir où positionner des widgets
         else:
             effet_y = 25
         image_coeur10=PhotoImage(file='./images/coeur10.png', master=fenetre2)
@@ -386,9 +452,10 @@ while test1:
                 compteur += 1
                 image_demi_coeur = PhotoImage(file='./images/coeur0.5.png', master=fenetre2)
                 Label(fenetre2, image=image_demi_coeur, bg='black').place(x=110+(compteur-1)*18,y=30)
+    ### Affichage de l'effet 
         if effet != "Aucun":
             if effet == "Enduro" or effet == "Vigueur" or effet == "Silencio" or effet == "Glagla" or effet == "Piment":
-                x_effet = 160
+                x_effet = 160 ### Encore une variable qui sert à savoir où placer un widget
             elif effet == "Max" or effet == "Volt":
                 x_effet = 135
             else:
@@ -396,6 +463,7 @@ while test1:
             Label(fenetre2, text=f"Effet Spécial : {effet}", bg='black', fg='white', font=Font(size=12)).grid(row=2, sticky=W)
             image_effet = PhotoImage(file=f'./images/{effet}.png', master=fenetre2)
             Label(fenetre2, image=image_effet, bg='black').place(x=x_effet, y=effet_y)
+        ### Affichage des coeurs jaunes rendus
             if effet == "Max":
                 image_coeur_jaune = PhotoImage(file='./images/coeur_jaune.png', master=fenetre2)
                 Label(fenetre2, text=f"Coeurs Jaunes :", bg='black', fg='white', font=Font(size=12)).grid(row=3, sticky=W)
@@ -404,6 +472,7 @@ while test1:
                     Label(fenetre2,image=image_coeur_jaune, bg='black').place(x=120+compteur*17, y=77)
                     compteur += 1
                 y = 96
+        ### Affichage de l'endurence rendue/donnée
             elif effet == 'Enduro' or effet == 'Vigueur':
                 Label(fenetre2, text=f"Puissance : ", bg='black', fg='white', font=Font(size=12)).grid(row=3, sticky=W)
                 image_cercle02 = PhotoImage(file=f"./images/cercle_{'jaune' if effet == 'Vigueur' else 'vert'}0.2.png", master=fenetre2)
@@ -413,14 +482,14 @@ while test1:
                 image_cerclecomplet = PhotoImage(file=f"./images/cercle_{'jaune' if effet == 'Vigueur' else 'vert'}.png", master=fenetre2)
                 compteur = 0
                 if types == ["Monstre", "Remede"] or types == ["Remede", "Monstre"]:
-                    y_max_enduro = 52
+                    y_max_enduro = 52 ### Une autre variable de placement
                 else:
                     y_max_enduro = 75
                 for cerclecomplet in range(int(valeur_endurance // 1)):
                     Label(fenetre2, image=image_cerclecomplet, bg='black').place(x=85+18*compteur, y=y_max_enduro)
                     compteur += 1
                     valeur_endurance -= 1
-                for cercle08 in range(int(round(valeur_endurance, 1)//0.8)):
+                for cercle08 in range(int(round(valeur_endurance, 1)//0.8)): ### round() est obligatoire car il y a des petits problèmes de calcul 
                     Label(fenetre2, image=image_cercle08, bg='black').place(x=85+18*compteur, y=y_max_enduro)
                     compteur += 1
                     valeur_endurance -= 0.8
@@ -437,37 +506,44 @@ while test1:
                     compteur += 1
                     valeur_endurance -= 0.2
                 y = 96
+        ### Affichage du niveau et de la durée si la recette n'est ni max ni enduro ni vigueur
             else:
                 Label(fenetre2, text=f"Niveau : {niveau}", bg='black', fg='white', font=Font(size=12)).grid(row=3, sticky=W)
                 Label(fenetre2, text=f"Durée : {'0' if duree_min < 10 else ''}{duree_min}:{duree_sec}{'0' if duree_sec == 0 else ''}", bg='black', fg='white', font=Font(size=12)).grid(row=4, sticky=W)
                 y = 120
         else:
             y = 48
-        fenetre2.geometry(f"360x{y+53}")
+        fenetre2.geometry(f"360x{y+53}") # Resize de la fenetre
+    ### Affichage des boutons "Recommencer" et "Arreter"
         Button(fenetre2, text="Recommencer", command=recommencer, padx=33, pady=10, bg='black', fg='white', font=75).place(x=1, y=y)
         Button(fenetre2, text="Arrêter", command=lambda : exit(1), padx=52, pady=10, bg='black', fg='white', font=75).place(x=185, y=y)
-        fenetre2.mainloop()
-        if not test2:
+        fenetre2.mainloop()### Ouverture de la fenetre
+        if not test2: ### Cela arrive si la fenetre a été fermée par l'utilisateur
             exit(1)
         del effet
     else:
+
+    ### Affichage des informations de l'ingredient choisi
+
         fenetre2 = Tk()
         fenetre2.resizable(width=False, height=False)
         fenetre2.title("Résultat")
-        image_coeur10=PhotoImage(file='./images/coeur10.png', master=fenetre2)
-        image_coeur5=PhotoImage(file='./images/coeur5.png', master=fenetre2)
-        image_coeur=PhotoImage(file='./images/coeur.png', master=fenetre2)
+        image_coeur10 = PhotoImage(file='./images/coeur10.png', master=fenetre2)
+        image_coeur5 = PhotoImage(file='./images/coeur5.png', master=fenetre2)
+        image_coeur = PhotoImage(file='./images/coeur.png', master=fenetre2)
         image_demi_coeur = PhotoImage(file='./images/coeur0.5.png', master=fenetre2)
-        image_coeur0=PhotoImage(file='./images/coeur0.png', master=fenetre2)
+        image_coeur0 = PhotoImage(file='./images/coeur0.png', master=fenetre2)
         background_photo = PhotoImage(file="./images/background.png", master=fenetre2)
         image_ingredient = PhotoImage(file=f"./images/{ingredient_choisi.numero}.png", master=fenetre2)
-        Label(text="", font=Font(size=12)).grid()
         Label(fenetre2, image=background_photo).place(x=0, y=0, relwidth=1, relheight=1)
         compteur = 0
+        ### Pour chaque information de l'ingredient choisi
         for information, valeur in information_ingredient.items():
             match information:
+            ### Affichage du nom de l'ingredient
                 case "nom":
                     Label(fenetre2, text=f"{valeur}", bg='black', fg='white', font=Font(size=15)).place(x=70)
+            ### Affichage du nombre de ceours rendus s'il est utilisé dans une recette
                 case "coeur":
                     Label(fenetre2, text="Points de Vie : ", bg='black', fg='white', font=Font(size=12)).place(x=0, y=23)
                     if valeur == 0:
@@ -485,6 +561,7 @@ while test1:
                         if type(coeurs) == float:
                             compteur += 1
                             Label(fenetre2, image=image_demi_coeur, bg='black').place(x=110+(compteur-1)*18,y=28)
+            ### Affichage de l'effet de l'ingredient dans une recette
                 case "effet":
                     if valeur != "Aucun":
                         if information_ingredient['effet'] == "Enduro" or information_ingredient['effet'] == "Vigueur" or information_ingredient['effet'] == "Silencio" or information_ingredient['effet'] == "Glagla" or information_ingredient['effet'] == "Piment":
@@ -496,6 +573,7 @@ while test1:
                         image_effet = PhotoImage(file=f'./images/{valeur}.png', master=fenetre2)
                         Label(fenetre2, image=image_effet, bg='black').place(x=x_effet, y=48)
                     Label(fenetre2, text=f"Effet Spécial : {valeur}", bg='black', fg='white', font=Font(size=12)).place(y=47) 
+            ### Affichage du niveau de l'ingredient en fonction du nombre de cet ingredient dans le recette
                 case "niveau":
                     if valeur == {1: 0, 2: 0, 3: 0, 4: 0, 5: 0} and information_ingredient['effet'] == "Aucun":
                         y_fenetre = 150
@@ -515,6 +593,7 @@ while test1:
                         y_fenetre = 210
                     else: 
                         y_fenetre = 285
+            ### Affichage de la durée que donne l'ingredient dans une recette
                 case "duree":
                     if information_ingredient['effet'] != "Max" and information_ingredient['effet'] != "Enduro" and information_ingredient['effet'] != "Vigueur" and information_ingredient['type'] != "Monstre":
                         y_duree = 127
@@ -523,6 +602,7 @@ while test1:
                     duree_min = valeur // 60
                     duree_sec = valeur % 60
                     Label(fenetre2, text=f"Durée : {'0' if duree_min < 10 else ''}{duree_min}:{'0' if duree_sec < 10 else ''}{duree_sec}", bg='black', fg='white', font=Font(size=12)).place(y=y_duree)
+            ### Affichage du nombre de coeurs jaunes donnés par l'ingredient (uniquement s'il est d'effet max)
                 case "valeur_max":
                     image_coeur_jaune = PhotoImage(file='./images/coeur_jaune.png', master=fenetre2)
                     Label(fenetre2, text=f"Coeurs Jaunes :", bg='black', fg='white', font=Font(size=12)).place(x=12, y=90)
@@ -530,6 +610,8 @@ while test1:
                     for coeur_jaune in range(valeur):
                         Label(fenetre2,image=image_coeur_jaune, bg='black').place(x=130+compteur*18, y=95)
                         compteur += 1
+            ### Affcihage de l'endurence rendue/donnée par l'ingredient en fonction du nombre de cet ingredient dans la recette
+            ### (uniquement s'il est d'effet Enduro ou Vigueur)
                 case "valeur_enduro_vigueur":
                     image_cercle02 = PhotoImage(file=f"./images/cercle_{'jaune' if information_ingredient['effet'] == 'Vigueur' else 'vert'}0.2.png", master=fenetre2)
                     image_cercle04 = PhotoImage(file=f"./images/cercle_{'jaune' if information_ingredient['effet'] == 'Vigueur' else 'vert'}0.4.png", master=fenetre2)
@@ -565,14 +647,17 @@ while test1:
                             Label(fenetre2, image=image_cercle02, bg='black').place(x=24+25*compteur, y=143+20*compteur2)
                             compteur2 += 1
                             effet -= 0.2
-                        compteur += 1  
+                        compteur += 1
+            ### Informations inutiles 
                 case "numero":
                     pass
                 case "type":
                     pass
-        fenetre2.geometry(f"350x{y_fenetre}")
+        fenetre2.geometry(f"350x{y_fenetre}")### Resize de la fenetre
+        ### Affichage des boutons "Recommencer" et "Arrêter"
         Button(fenetre2, text="Recommencer", command=recommencer, padx=33, pady=10, bg='black', fg='white', font=75).place(x=1, y=y_fenetre-50)
         Button(fenetre2, text="Arrêter", command=lambda : exit(1), padx=52, pady=10, bg='black', fg='white', font=75).place(x=185, y=y_fenetre-50)
+        ### Affcihage de l'image de l'ingredient
         Label(fenetre2, image=image_ingredient, bg='black').place(x=250)
         fenetre2.mainloop()
         if not test2:
