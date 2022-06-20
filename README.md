@@ -10,7 +10,7 @@ Ben pour l'exécuter il faut :
 - Executer python Main.py
 - Enjoy!
 ### Mac
-Honnetement je n'ai aucune idée de comment fonctionne un mac et je m'en contrefous
+Honnêtement je n'ai aucune idée de comment fonctionne un mac et je m'en contrefous
 ### Linux 
 - Ouvrir un explorateur de fichier, aller dans le dossier du programme et ouvrir un terminal en faisant clic droit puis "Ouvrir dans un terminal"
 - Executer python3 Main.py
