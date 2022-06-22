@@ -648,7 +648,7 @@ while test1: ### Si test1 == False c'est que l'utilisateur a fermé la fenetre t
                             compteur2 += 1
                             effet -= 0.2
                         compteur += 1
-            ### Informations inutiles 
+            ### Informations inutiles et non affichées
                 case "numero":
                     pass
                 case "type":
