@@ -16,5 +16,5 @@ Honnêtement je n'ai aucune idée de comment fonctionne un mac et je m'en contre
 - Executer python3 Main.py
 - Enjoy!
 ## Note Importante
-Python >= 3.10.1 est nécessaire pour compiler le programme.
+Python >= 3.10 est nécessaire pour compiler le programme.
 
