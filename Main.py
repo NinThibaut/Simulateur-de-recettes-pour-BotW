@@ -84,7 +84,6 @@ def information():
     global is_recette, page_changee
     is_recette = False
     fenetre.destroy()
-    print('information')
     page_changee = True
 
 ### Fonction qui est utilisée si l'utilisateur clique sur le bouton "Simulateur de recettes"
@@ -93,7 +92,6 @@ def recette():
     global is_recette, page_changee
     is_recette = True
     fenetre.destroy()
-    print('recette', fenetre)
     page_changee = True
 
 ### Fonction qui est utilisée si l'utilisateur appuie sur le bouton "Recommencer" à la fin
