@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter.font import Font
 from sys import exit
+from os import getcwd
 
 class Ingredient:
 
@@ -34,7 +35,7 @@ class Ingredient:
             for valeur in ingredients_choisis.values():
                 compteur_ingredient += valeur
             bouton_termine['state'] = NORMAL
-            image_ingredient_choisi.append(PhotoImage(file=f"./images/{self.numero}.png"))
+            image_ingredient_choisi.append(PhotoImage(file=f"{path}/images/{self.numero}.png"))
             liste_label[compteur_ingredient-1]['image'] = image_ingredient_choisi[compteur_ingredient-1]
 
     ### Methode si l'ingredient doit donner ses informations 
@@ -228,11 +229,12 @@ liste_ingredient = [
 ### Affichage de la fenêtre titre
 
 test1 = False
+path = getcwd()
 fenetre_titre = Tk()
 fenetre_titre.title('Accueil')
 fenetre_titre.resizable(height=False, width=False)
-background_photo = PhotoImage(file="./images/background.png", master=fenetre_titre)
-logo = PhotoImage(file="./images/Logo.png", master=fenetre_titre)
+background_photo = PhotoImage(file=f"{path}/images/background.png", master=fenetre_titre)
+logo = PhotoImage(file=f"{path}/images/Logo.png", master=fenetre_titre)
 Label(fenetre_titre, image=background_photo).place(x=0, y=0, relwidth=1, relheight=1)
 Label(fenetre_titre, image=logo, bg='black', fg='white').grid(columnspan=2)
 Button(fenetre_titre, text="Commencer", command=lambda : close(1), bg='black', fg='white',font=Font(size=20), padx=170, pady=8).grid(columnspan=2)
@@ -271,7 +273,7 @@ while test1: ### Si test1 == False c'est que l'utilisateur a fermé la fenetre t
         Label(fenetre, pady=20).grid(row=0, column=0) # Label servant à occuper la row 0 
         fenetre.geometry("+0+0")
         fenetre.resizable(width=False, height=False)
-        background_photo = PhotoImage(file="./images/background.png", master=fenetre)
+        background_photo = PhotoImage(file=f"{path}/images/background.png", master=fenetre)
         background_label = Label(fenetre, image=background_photo)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
         
@@ -289,7 +291,7 @@ while test1: ### Si test1 == False c'est que l'utilisateur a fermé la fenetre t
             ### S'il y a eu un changement de page, cette boucle for affiche à nouveau les ingredients choisis dans les carrés en haut
             for ingredient, valeur in ingredients_choisis.items():
                 for nombre in range(valeur):
-                    image_ingredient_choisi.append(PhotoImage(file=f"./images/{ingredient.numero}.png"))
+                    image_ingredient_choisi.append(PhotoImage(file=f"{path}/images/{ingredient.numero}.png"))
                     liste_label.append(Label(fenetre, bg='black', pady=40, padx=50, image=image_ingredient_choisi[compteur2]))
                     liste_label[-1].grid(row=2, column=compteur2+2)
                     compteur2 += 1
@@ -324,15 +326,15 @@ while test1: ### Si test1 == False c'est que l'utilisateur a fermé la fenetre t
                 ligne = (compteur-((page-1)*50)) // 10
                 colonne = (compteur-((page-1)*50)) % 10
                 compteur += 1
-                ingredient_photo = PhotoImage(file=f"./images/{ingredient.numero}.png", master=fenetre)
-                image_coeur = PhotoImage(file="./images/coeur.png", master=fenetre)   
+                ingredient_photo = PhotoImage(file=f"{path}/images/{ingredient.numero}.png", master=fenetre)
+                image_coeur = PhotoImage(file=f"{path}/images/coeur.png", master=fenetre)   
             ### J'ai l'impression que les lignes 330 à 341 peuvent être opti...
                 if ingredient.effet != "Aucun" and is_recette: 
-                    image_effet = PhotoImage(file=f"./images/{ingredient.effet}.png", master=fenetre, height=20, width=20)
+                    image_effet = PhotoImage(file=f"{path}/images/{ingredient.effet}.png", master=fenetre, height=20, width=20)
                     Button(fenetre, image=ingredient_photo,command=lambda ingredient=ingredient, ingredient_photo=ingredient_photo, image_coeur=image_coeur,image_effet=image_effet: ingredient.choisi(), relief=FLAT, bg='black').grid(row=ligne + 3, column=colonne, padx=12, pady=12)
                     Label(fenetre,image=image_effet, bg='black').grid(column=colonne, row=ligne+3, sticky=SE, padx=15, pady=15)
                 elif ingredient.effet != "Aucun" and not is_recette:
-                    image_effet = PhotoImage(file=f"./images/{ingredient.effet}.png", master=fenetre, height=20, width=20)
+                    image_effet = PhotoImage(file=f"{path}/images/{ingredient.effet}.png", master=fenetre, height=20, width=20)
                     Button(fenetre, image=ingredient_photo,command=lambda ingredient=ingredient, ingredient_photo=ingredient_photo, image_coeur=image_coeur,image_effet=image_effet: ingredient.information(), relief=FLAT, bg='black').grid(row=ligne + 3, column=colonne, padx=12, pady=12)
                     Label(fenetre,image=image_effet, bg='black').grid(column=colonne, row=ligne+3, sticky=SE, padx=15, pady=15)
                 elif ingredient.effet == "Aucun" and is_recette:
@@ -349,10 +351,10 @@ while test1: ### Si test1 == False c'est que l'utilisateur a fermé la fenetre t
 ### Affiche ou non les boutons permettant de changer de page
 
         if page != 1:
-            image_back = PhotoImage(file='./images/Back.png', master=fenetre)
+            image_back = PhotoImage(file=f'{path}/images/Back.png', master=fenetre)
             Button(fenetre, image=image_back, bg='black', command= lambda : change_page("Précédent")).grid(row=8)
         if page != 3:
-            image_next = PhotoImage(file='./images/Next.png', master=fenetre)
+            image_next = PhotoImage(file=f'{path}/images/Next.png', master=fenetre)
             Button(fenetre, image=image_next, bg='black', command= lambda : change_page("Suivant")).grid(row=8, column=9)
         fenetre.mainloop() ### La fenetre s'ouvre
         if not page_changee and not test: # Traduction : Si l'utilisateur a fermé la fenetre, 
@@ -425,18 +427,18 @@ while test1: ### Si test1 == False c'est que l'utilisateur a fermé la fenetre t
         fenetre2 = Tk()
         fenetre2.resizable(width=False, height=False)
         fenetre2.title("Résultat")
-        photo = PhotoImage(file="./images/background.png", master=fenetre2)
+        photo = PhotoImage(file=f"{path}/images/background.png", master=fenetre2)
         Label(fenetre2, image=photo).place(x=0, y=0, relwidth=1, relheight=1)
         Label(fenetre2, text="Résultat", bg='black', fg='white', font=100).grid(columnspan=5)
     ### Affichage du nombre de coeurs rendus
-        if coeurs >= 30 or effet == "Max":
-            Label(fenetre2, text="Points de vie : Récupération Complète", bg='black', fg='white', font=Font(size=12)).grid(row=1, sticky=W)
+        if coeurs != 0:
+            Label(fenetre2, text=f"Points de vie : {'Récupération Complète' if effet == 'Max' or coeurs >= 30 else ''}", bg='black', fg='white', font=Font(size=12)).grid(row=1, sticky=W)
             effet_y = 49 ### Ce type de variable sert à savoir où positionner des widgets
         else:
             effet_y = 25
-        image_coeur10=PhotoImage(file='./images/coeur10.png', master=fenetre2)
-        image_coeur5=PhotoImage(file='./images/coeur5.png', master=fenetre2)
-        image_coeur=PhotoImage(file='./images/coeur.png', master=fenetre2)
+        image_coeur10=PhotoImage(file=f'{path}/images/coeur10.png', master=fenetre2)
+        image_coeur5=PhotoImage(file=f'{path}/images/coeur5.png', master=fenetre2)
+        image_coeur=PhotoImage(file=f'{path}/images/coeur.png', master=fenetre2)
         compteur = 0
         if coeurs != 0 and coeurs != 30 and effet != "Max":
             for coeur10 in range(int(round(coeurs, 0))//10):
@@ -450,7 +452,7 @@ while test1: ### Si test1 == False c'est que l'utilisateur a fermé la fenetre t
                 Label(fenetre2, image=image_coeur, bg='black').place(x=110+(compteur-1)*18,y=30)
             if type(coeurs) == float:
                 compteur += 1
-                image_demi_coeur = PhotoImage(file='./images/coeur0.5.png', master=fenetre2)
+                image_demi_coeur = PhotoImage(file=f'{path}/images/coeur0.5.png', master=fenetre2)
                 Label(fenetre2, image=image_demi_coeur, bg='black').place(x=110+(compteur-1)*18,y=30)
     ### Affichage de l'effet 
         if effet != "Aucun":
@@ -461,11 +463,11 @@ while test1: ### Si test1 == False c'est que l'utilisateur a fermé la fenetre t
             else:
                 x_effet = 150
             Label(fenetre2, text=f"Effet Spécial : {effet}", bg='black', fg='white', font=Font(size=12)).grid(row=2, sticky=W)
-            image_effet = PhotoImage(file=f'./images/{effet}.png', master=fenetre2)
+            image_effet = PhotoImage(file=f'{path}/images/{effet}.png', master=fenetre2)
             Label(fenetre2, image=image_effet, bg='black').place(x=x_effet, y=effet_y)
         ### Affichage des coeurs jaunes rendus
             if effet == "Max":
-                image_coeur_jaune = PhotoImage(file='./images/coeur_jaune.png', master=fenetre2)
+                image_coeur_jaune = PhotoImage(file=f'{path}/images/coeur_jaune.png', master=fenetre2)
                 Label(fenetre2, text=f"Coeurs Jaunes :", bg='black', fg='white', font=Font(size=12)).grid(row=3, sticky=W)
                 compteur = 0
                 for coeur_jaune in range(valeur_max):
@@ -475,11 +477,11 @@ while test1: ### Si test1 == False c'est que l'utilisateur a fermé la fenetre t
         ### Affichage de l'endurence rendue/donnée
             elif effet == 'Enduro' or effet == 'Vigueur':
                 Label(fenetre2, text=f"Puissance : ", bg='black', fg='white', font=Font(size=12)).grid(row=3, sticky=W)
-                image_cercle02 = PhotoImage(file=f"./images/cercle_{'jaune' if effet == 'Vigueur' else 'vert'}0.2.png", master=fenetre2)
-                image_cercle04 = PhotoImage(file=f"./images/cercle_{'jaune' if effet == 'Vigueur' else 'vert'}0.4.png", master=fenetre2)
-                image_cercle06 = PhotoImage(file=f"./images/cercle_{'jaune' if effet == 'Vigueur' else 'vert'}0.6.png", master=fenetre2)
-                image_cercle08 = PhotoImage(file=f"./images/cercle_{'jaune' if effet == 'Vigueur' else 'vert'}0.8.png", master=fenetre2)
-                image_cerclecomplet = PhotoImage(file=f"./images/cercle_{'jaune' if effet == 'Vigueur' else 'vert'}.png", master=fenetre2)
+                image_cercle02 = PhotoImage(file=f"{path}/images/cercle_{'jaune' if effet == 'Vigueur' else 'vert'}0.2.png", master=fenetre2)
+                image_cercle04 = PhotoImage(file=f"{path}/images/cercle_{'jaune' if effet == 'Vigueur' else 'vert'}0.4.png", master=fenetre2)
+                image_cercle06 = PhotoImage(file=f"{path}/images/cercle_{'jaune' if effet == 'Vigueur' else 'vert'}0.6.png", master=fenetre2)
+                image_cercle08 = PhotoImage(file=f"{path}/images/cercle_{'jaune' if effet == 'Vigueur' else 'vert'}0.8.png", master=fenetre2)
+                image_cerclecomplet = PhotoImage(file=f"{path}/images/cercle_{'jaune' if effet == 'Vigueur' else 'vert'}.png", master=fenetre2)
                 compteur = 0
                 if types == ["Monstre", "Remede"] or types == ["Remede", "Monstre"]:
                     y_max_enduro = 52 ### Une autre variable de placement
@@ -528,13 +530,13 @@ while test1: ### Si test1 == False c'est que l'utilisateur a fermé la fenetre t
         fenetre2 = Tk()
         fenetre2.resizable(width=False, height=False)
         fenetre2.title("Résultat")
-        image_coeur10 = PhotoImage(file='./images/coeur10.png', master=fenetre2)
-        image_coeur5 = PhotoImage(file='./images/coeur5.png', master=fenetre2)
-        image_coeur = PhotoImage(file='./images/coeur.png', master=fenetre2)
-        image_demi_coeur = PhotoImage(file='./images/coeur0.5.png', master=fenetre2)
-        image_coeur0 = PhotoImage(file='./images/coeur0.png', master=fenetre2)
-        background_photo = PhotoImage(file="./images/background.png", master=fenetre2)
-        image_ingredient = PhotoImage(file=f"./images/{ingredient_choisi.numero}.png", master=fenetre2)
+        image_coeur10 = PhotoImage(file=f'{path}/images/coeur10.png', master=fenetre2)
+        image_coeur5 = PhotoImage(file=f'{path}/images/coeur5.png', master=fenetre2)
+        image_coeur = PhotoImage(file=f'{path}/images/coeur.png', master=fenetre2)
+        image_demi_coeur = PhotoImage(file=f'{path}/images/coeur0.5.png', master=fenetre2)
+        image_coeur0 = PhotoImage(file=f'{path}/images/coeur0.png', master=fenetre2)
+        background_photo = PhotoImage(file=f"{path}/images/background.png", master=fenetre2)
+        image_ingredient = PhotoImage(file=f"{path}/images/{ingredient_choisi.numero}.png", master=fenetre2)
         Label(fenetre2, image=background_photo).place(x=0, y=0, relwidth=1, relheight=1)
         compteur = 0
         ### Pour chaque information de l'ingredient choisi
@@ -570,7 +572,7 @@ while test1: ### Si test1 == False c'est que l'utilisateur a fermé la fenetre t
                             x_effet = 135
                         else:
                             x_effet = 150
-                        image_effet = PhotoImage(file=f'./images/{valeur}.png', master=fenetre2)
+                        image_effet = PhotoImage(file=f'{path}/images/{valeur}.png', master=fenetre2)
                         Label(fenetre2, image=image_effet, bg='black').place(x=x_effet, y=48)
                     Label(fenetre2, text=f"Effet Spécial : {valeur}", bg='black', fg='white', font=Font(size=12)).place(y=47) 
             ### Affichage du niveau de l'ingredient en fonction du nombre de cet ingredient dans le recette
@@ -604,7 +606,7 @@ while test1: ### Si test1 == False c'est que l'utilisateur a fermé la fenetre t
                     Label(fenetre2, text=f"Durée : {'0' if duree_min < 10 else ''}{duree_min}:{'0' if duree_sec < 10 else ''}{duree_sec}", bg='black', fg='white', font=Font(size=12)).place(y=y_duree)
             ### Affichage du nombre de coeurs jaunes donnés par l'ingredient (uniquement s'il est d'effet max)
                 case "valeur_max":
-                    image_coeur_jaune = PhotoImage(file='./images/coeur_jaune.png', master=fenetre2)
+                    image_coeur_jaune = PhotoImage(file=f'{path}/images/coeur_jaune.png', master=fenetre2)
                     Label(fenetre2, text=f"Coeurs Jaunes :", bg='black', fg='white', font=Font(size=12)).place(x=12, y=90)
                     compteur = 0
                     for coeur_jaune in range(valeur):
@@ -613,11 +615,11 @@ while test1: ### Si test1 == False c'est que l'utilisateur a fermé la fenetre t
             ### Affcihage de l'endurence rendue/donnée par l'ingredient en fonction du nombre de cet ingredient dans la recette
             ### (uniquement s'il est d'effet Enduro ou Vigueur)
                 case "valeur_enduro_vigueur":
-                    image_cercle02 = PhotoImage(file=f"./images/cercle_{'jaune' if information_ingredient['effet'] == 'Vigueur' else 'vert'}0.2.png", master=fenetre2)
-                    image_cercle04 = PhotoImage(file=f"./images/cercle_{'jaune' if information_ingredient['effet'] == 'Vigueur' else 'vert'}0.4.png", master=fenetre2)
-                    image_cercle06 = PhotoImage(file=f"./images/cercle_{'jaune' if information_ingredient['effet'] == 'Vigueur' else 'vert'}0.6.png", master=fenetre2)
-                    image_cercle08 = PhotoImage(file=f"./images/cercle_{'jaune' if information_ingredient['effet'] == 'Vigueur' else 'vert'}0.8.png", master=fenetre2)
-                    image_cerclecomplet = PhotoImage(file=f"./images/cercle_{'jaune' if information_ingredient['effet'] == 'Vigueur' else 'vert'}.png", master=fenetre2)
+                    image_cercle02 = PhotoImage(file=f"{path}/images/cercle_{'jaune' if information_ingredient['effet'] == 'Vigueur' else 'vert'}0.2.png", master=fenetre2)
+                    image_cercle04 = PhotoImage(file=f"{path}/images/cercle_{'jaune' if information_ingredient['effet'] == 'Vigueur' else 'vert'}0.4.png", master=fenetre2)
+                    image_cercle06 = PhotoImage(file=f"{path}/images/cercle_{'jaune' if information_ingredient['effet'] == 'Vigueur' else 'vert'}0.6.png", master=fenetre2)
+                    image_cercle08 = PhotoImage(file=f"{path}/images/cercle_{'jaune' if information_ingredient['effet'] == 'Vigueur' else 'vert'}0.8.png", master=fenetre2)
+                    image_cerclecomplet = PhotoImage(file=f"{path}/images/cercle_{'jaune' if information_ingredient['effet'] == 'Vigueur' else 'vert'}.png", master=fenetre2)
                     Label(fenetre2, text="Endurance donnée :", bg='black', fg='white', font=Font(size=12)).place(y=90)
                     tableau_enduro_vigueur = Canvas(fenetre2, height=90, width=122, bg='black')
                     tableau_enduro_vigueur.create_line(25, 0, 25, 155, 50, 155, 50, 0, 75, 0, 75, 155, 100, 155, 100, 0, 125, 0, 125, 25, 0, 25, fill='white')
