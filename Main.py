@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter.font import Font
-from sys import exit
-from os import getcwd
+from sys import exit, argv
+from os import path
 
 class Ingredient:
 
@@ -229,7 +229,7 @@ liste_ingredient = [
 ### Affichage de la fenêtre titre
 
 test1 = False
-path = getcwd()
+path = path.dirname(argv[0])
 fenetre_titre = Tk()
 fenetre_titre.title('Accueil')
 fenetre_titre.resizable(height=False, width=False)
