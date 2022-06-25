@@ -326,7 +326,7 @@ while test1: ### Si test1 == False c'est que l'utilisateur a fermé la fenetre t
                 compteur += 1
                 ingredient_photo = PhotoImage(file=f"{path}/images/{ingredient.numero}.png", master=fenetre)
                 image_coeur = PhotoImage(file=f"{path}/images/coeur.png", master=fenetre)   
-            ### J'ai l'impression que les lignes 330 à 341 peuvent être opti...
+            ### J'ai l'impression que les lignes suivantes peuvent être opti...
                 if ingredient.effet != "Aucun" and is_recette: 
                     image_effet = PhotoImage(file=f"{path}/images/{ingredient.effet}.png", master=fenetre, height=20, width=20)
                     Button(fenetre, image=ingredient_photo,command=lambda ingredient=ingredient, ingredient_photo=ingredient_photo, image_coeur=image_coeur,image_effet=image_effet: ingredient.choisi(), relief=FLAT, bg='black').grid(row=ligne + 3, column=colonne, padx=12, pady=12)
